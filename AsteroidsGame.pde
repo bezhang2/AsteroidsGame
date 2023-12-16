@@ -1,10 +1,12 @@
 Spaceship willy = new Spaceship();
 Star[] nightSky = new Star[200];
 ArrayList <Asteroid> asteroids = new ArrayList <Asteroid>();
+ArrayList <Bullet> bullets = new ArrayList <Bullet>();
 int rocks = 0;
 boolean wPressed = false;
 boolean dPressed = false;
 boolean aPressed = false;
+boolean spacePressed = false;
 
 public void setup() 
 {
@@ -52,6 +54,20 @@ public void draw()
       asteroids.get(i).move();
     }
   }
+  for (int i = 0; i < bullets.size(); i++) {
+    bullets.get(i).move();
+    bullets.get(i).show();
+  }
+  for (int i = 0; i < bullets.size(); i++) {
+    for (int j = 0; j < asteroids.size(); j++) {
+      float dBullet = dist((float)bullets.get(i).getX(), (float)bullets.get(i).getY(), (float)asteroids.get(j).getXcenter(), (float)asteroids.get(j).getYcenter());
+      if (dBullet < 20) {
+        bullets.remove(i);
+        asteroids.remove(j);
+        break;
+      }
+    }
+  }
 }
 public void keyPressed() {
   if (key == 'w') {
@@ -66,6 +82,9 @@ public void keyPressed() {
   if (key == 'e') {
     willy.hyperspace();
   }
+  if (key == ' ') {
+    bullets.add(new Bullet(willy));
+  }
 }
 public void keyReleased() {
   if (key == 'w') {
@@ -76,5 +95,8 @@ public void keyReleased() {
   }
   if (key == 'a') {
     aPressed = false;
+  }
+  if (key == ' ') {
+    spacePressed = false;
   }
 }
